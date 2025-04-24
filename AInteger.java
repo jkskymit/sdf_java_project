@@ -25,19 +25,19 @@ public class AInteger {
 
     public static String add_strings(String string1, String string2)
     {
-        int l1 = string1.length();
+        int length1 = string1.length();
         
-        int l2 = string2.length();
+        int length2 = string2.length();
         
         int carry = 0;
         
         String string_sum = "";
         
-        for(int i=l1-1;i>=0;i--)
+        for(int i=length1-1;i>=0;i--)
         {
-            if((l1-i) <= l2)
+            if((length1-i) <= length2)
             {
-                int sum_of_digits = (string1.charAt(i)-'0')+(string2.charAt(l2-(l1-i))-'0')+carry;
+                int sum_of_digits = (string1.charAt(i)-'0')+(string2.charAt(length2-(length1-i))-'0')+carry;
                 
                 carry = sum_of_digits/10;
                 
@@ -62,24 +62,24 @@ public class AInteger {
     
     public static String subtract_strings(String string1,String string2)
     {
-        int l1 = string1.length();
+        int length1 = string1.length();
         
-        int l2 = string2.length();
+        int length2 = string2.length();
         
         int borrow = 0;
         
         String string_difference = "";
         
-        for(int i=l1-1;i>=0;i--)
+        for(int i=length1-1;i>=0;i--)
         {
-            if(l1-i <= l2)
+            if(length1-i <= length2)
             {
                 int difference_of_digits;
                 
-                if((string1.charAt(i) - '0') >= (string2.charAt(l2-(l1-i))-'0')+ borrow)
+                if((string1.charAt(i) - '0') >= (string2.charAt(length2-(length1-i))-'0')+ borrow)
                 {
                     
-                    difference_of_digits = (string1.charAt(i)-string2.charAt(l2-(l1-i)))-borrow;
+                    difference_of_digits = (string1.charAt(i)-string2.charAt(length2-(length1-i)))-borrow;
                     
                     borrow = 0;
                     
@@ -87,7 +87,7 @@ public class AInteger {
                 }
                 else
                 {
-                    difference_of_digits = (10-borrow) +(string1.charAt(i)-string2.charAt(l2-(l1-i)));
+                    difference_of_digits = (10-borrow) +(string1.charAt(i)-string2.charAt(length2-(length1-i)));
                     
                     string_difference = Integer.toString(difference_of_digits).concat(string_difference);
                     
@@ -118,9 +118,9 @@ public class AInteger {
         }
         String formatted_string_difference;
         
-        int l3 = string_difference.length();
+        int length_string_difference = string_difference.length();
         
-        for(int i=0;i<l3;i++)
+        for(int i=0;i<length_string_difference;i++)
         {
             if(string_difference.charAt(i)!='0')
             {
