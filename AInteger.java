@@ -329,5 +329,116 @@ public class AInteger {
 
         return remove_leading_zeroes(Answer);
     }
+
+    
+    public static String Multiplication (String string1,String string2)
+    {
+        String absolutestring1 = absolute_string(remove_leading_zeroes(string1));
+        
+        String absolutestring2 = absolute_string(remove_leading_zeroes(string2));
+        
+        String Answer = "0";
+        
+        int l1 = absolutestring1.length();
+        
+        int l2 = absolutestring2.length();
+        
+        if(absolutestring1.equals("0")||absolutestring2.equals("0"))
+        {
+            return "0";
+        }
+        for(int i=l2-1;i>=0;i--)
+        {   
+            String string_multiply = "";
+
+            int carry = 0;
+            
+            for(int j=l1-1;j>=0;j--)
+            {
+                int product_of_digits = (absolutestring1.charAt(j)-'0')*(absolutestring2.charAt(i)-'0') + carry;
+
+                carry = product_of_digits/10;
+
+                string_multiply = Integer.toString(product_of_digits - 10*carry).concat(string_multiply);
+            }
+            
+            if(carry!=0)    string_multiply= Integer.toString(carry).concat(string_multiply);
+            
+            for(int j=0;j<l2-1-i;j++)
+            {
+                string_multiply = string_multiply.concat("0");
+            }
+           
+            Answer = Addition(Answer,string_multiply);
+
+        }
+        
+        if(string1.charAt(0)=='-' || string2.charAt(0)=='-')
+        {
+            if(string1.charAt(0)=='-' && string2.charAt(0)=='-')
+            {
+                return Answer;
+            }
+            Answer = '-' + Answer;
+            
+            return Answer;
+        }
+        return Answer;
+    }
+    
+    public static String Division(String string1,String string2)
+    {
+        String absolutestring1 = absolute_string(remove_leading_zeroes(string1));
+        
+        String absolutestring2 = absolute_string(remove_leading_zeroes(string2));
+
+        if(absolutestring2.equals("0"))
+        {
+            throw  new ArithmeticException("Division by zero is not defined");
+        }
+        if( islesser(absolutestring1, absolutestring2))  
+        {
+            return "0";
+        }
+
+        String string_quotient = "";
+        
+        String string_dividend = "";
+        
+        for(int i=0;i<absolutestring1.length();i++)
+        {   
+            string_dividend = string_dividend.concat(Character.toString(absolutestring1.charAt(i)));
+            
+            int midway_quotient=0;
+
+            while( isgreater_or_equals(string_dividend, absolutestring2) )
+            {   
+                string_dividend = Subtraction(string_dividend, absolutestring2);
+                
+                midway_quotient++;
+
+            }
+
+            string_quotient = string_quotient.concat(Integer.toString(midway_quotient));
+
+        }
+
+        string_quotient = remove_leading_zeroes(string_quotient);
+
+        if(string1.charAt(0)=='-' || string2.charAt(0)=='-')
+        {
+            if(string1.charAt(0)=='-' && string2.charAt(0)=='-')
+            {
+                return string_quotient;
+            }
+
+            string_quotient = "-" + string_quotient;
+            
+            return string_quotient;
+        }
+        
+        return string_quotient;
+            
+    }
 }
 
