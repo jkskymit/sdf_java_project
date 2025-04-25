@@ -440,5 +440,25 @@ public class AInteger {
         return string_quotient;
             
     }
+
+    public static AInteger Add(AInteger integer1, AInteger integer2)
+    {
+        return parse(Addition(integer1.integer,integer2.integer));
+    }
+
+    public static AInteger Subtract(AInteger integer1, AInteger integer2)
+    {
+        return parse(Subtraction(integer1.integer,integer2.integer));
+    }
+
+    public static AInteger Multiply(AInteger integer1,AInteger integer2)
+    {
+        return parse(Multiplication(integer1.integer, integer2.integer));
+    }
+
+    public static AInteger Divide(AInteger integer1,AInteger integer2)
+    {
+        return parse(Division(integer1.integer,integer2.integer));
+    }
 }
 
