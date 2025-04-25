@@ -131,4 +131,115 @@ public class AInteger {
         }
         return "0";
     }
+
+    public static Boolean isgreater(String string1,String string2)
+    {   
+        string1 = remove_leading_zeroes(string1);
+        
+        string2 = remove_leading_zeroes(string2);
+
+        if(string1.charAt(0)=='-' || string2.charAt(0)=='-')
+        {
+            if(string1.charAt(0)=='-' && string2.charAt(0)=='-')
+            {
+                return islesser(string1.substring(1), string2.substring(1));
+            }
+
+            if(string1.charAt(0)=='-') return false;
+            else return true;
+        }
+
+        int length1 = string1.length();
+        
+        int length2 = string2.length();
+        
+        if(length1 > length2) return true;
+        
+        if(length2 > length1) return false;
+        
+        for(int i=0;i<length1;i++)
+        {
+            if(string1.charAt(i)-'0' > string2.charAt(i)-'0')
+            {
+                return true;
+            }
+            if(string1.charAt(i)-'0' < string2.charAt(i)-'0')
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static Boolean islesser(String string1,String string2)
+    {   
+        string1 = remove_leading_zeroes(string1);
+        
+        string2 = remove_leading_zeroes(string2);
+
+        int length1 = string1.length();
+        
+        int length2 = string2.length();
+        
+        if(string1.charAt(0)=='-' || string2.charAt(0)=='-')
+        {
+            if(string1.charAt(0)=='-' && string2.charAt(0)=='-')
+            {
+                return isgreater(string1.substring(1), string2.substring(1));
+            }
+            
+            if(string1.charAt(0)=='-') return true;
+            else return false;
+        }
+
+        if(length1 < length2) return true;
+        
+        if(length2 < length1) return false;
+        
+        for(int i=0;i<length1;i++)
+        {
+            if(string1.charAt(i)-'0' < string2.charAt(i)-'0')
+            {
+                return true;
+            }
+            if(string1.charAt(i)-'0' > string2.charAt(i)-'0')
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public static Boolean isgreater_or_equals(String string1,String string2)
+    {
+        if(isgreater(string1, string2) || remove_leading_zeroes(string1).equals(remove_leading_zeroes(string2))) return true;
+        else return false;
+    }
+
+    public static Boolean islesser_or_equals(String string1,String string2)
+    {
+        if(islesser(string1, string2) || remove_leading_zeroes(string1).equals(remove_leading_zeroes(string2)) ) return true;
+        else return false;
+    }
+
+    public static String remove_leading_zeroes(String string)
+    {
+        int l = string.length();
+        
+        for(int i=0;i<l;i++)
+        {
+            if(string.charAt(i)!='0' && string.charAt(i)!='-')
+            {
+                if(string.charAt(0)!='-')  return string.substring(i);
+                else return "-" + string.substring(i);
+            }
+        }
+        return "0";
+    }
+
+    public static String absolute_string(String string)
+    {
+        if(string.charAt(0)=='-') return  string.substring(1);
+        else return string;
+    }
 }
