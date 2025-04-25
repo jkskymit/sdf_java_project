@@ -242,4 +242,92 @@ public class AInteger {
         if(string.charAt(0)=='-') return  string.substring(1);
         else return string;
     }
+
+    public static String Addition(String string1,String string2)
+    {
+        String formatted_string1 = remove_leading_zeroes(string1);
+        
+        String formatted_string2 = remove_leading_zeroes(string2);
+        
+        if(formatted_string1.charAt(0)=='-' || formatted_string2.charAt(0)=='-')
+        {
+            if(formatted_string1.charAt(0)=='-' && formatted_string2.charAt(0)=='-')
+            {
+                String absolutestring1 = absolute_string(formatted_string1);
+                
+                String absolutestring2 = absolute_string(formatted_string2);
+                
+                if(isgreater_or_equals(absolutestring1,absolutestring2))
+                {
+                    String Answer = add_strings(absolutestring1, absolutestring2);
+                    
+                    Answer = "-" + Answer;
+                    
+                    return Answer;
+                }
+                String Answer = add_strings(absolutestring2,absolutestring1);
+                
+                Answer = "-" + Answer;
+                
+                return Answer;
+            }
+
+            String absolutestring1;
+            
+            String absolutestring2;
+            
+            absolutestring1 = absolute_string(formatted_string1);
+            
+            absolutestring2 = absolute_string(formatted_string2);
+            
+            if(isgreater(absolutestring1, absolutestring2))
+            {
+                String Answer = subtract_strings(absolutestring1, absolutestring2);
+                
+                if(formatted_string1.charAt(0)=='-') 
+                {
+                    Answer = '-' + Answer;
+                }
+
+                return Answer;
+            }
+            else
+            {
+                String Answer = subtract_strings(absolutestring2, absolutestring1);
+                
+                if(formatted_string2.charAt(0)=='-')
+                {
+                    Answer = '-' + Answer;
+                }
+
+                return remove_leading_zeroes(Answer);
+            }
+        }
+
+        if(isgreater(formatted_string1, formatted_string2))
+        {
+            String Answer = add_strings(formatted_string1, formatted_string2);
+           
+            return Answer;
+        }
+        else 
+        {
+            String Answer = add_strings(formatted_string2, formatted_string1);
+            
+            return Answer;
+        }
+    }
+
+
+    public static String Subtraction (String string1, String string2)
+    {
+        if(string2.charAt(0)=='-') string2 = string2.substring(1);
+        else string2 = '-' + string2;
+
+        String Answer = Addition(string1, string2);
+
+
+        return remove_leading_zeroes(Answer);
+    }
 }
+
