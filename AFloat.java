@@ -277,4 +277,82 @@ public class AFloat {
         
         else return '-' + fin_Answer;
     }
+
+    public static String Division(String string1,String string2)
+    {
+        if(!isdecimal(string1)) string1 = string1 + ".0";
+        
+        if(!isdecimal(string2)) string2 = string2 + ".0";
+
+        string1 = remove_both_leading_and_trailing_zeroes(string1);
+        
+        string2 = remove_both_leading_and_trailing_zeroes(string2);
+
+        int dec1 = decimal_places(string1);
+        
+        int dec2 = decimal_places(string2);
+
+        
+        String formatted_string1 = AInteger.absolute_string(string1.substring(0,decimal_index(string1)) + string1.substring(decimal_index(string1)+1));
+           
+        String formatted_string2 = AInteger.absolute_string(string2.substring(0,decimal_index(string2)) + string2.substring(decimal_index(string2)+1));
+
+        int max = Math.max(30-dec2 + dec1 ,formatted_string2.length());
+
+        for(int i=1;i<= (max);i++)
+        {
+            formatted_string1 = formatted_string1 + '0';
+        }
+
+        String absolute_Answer = AInteger.Division(formatted_string1, formatted_string2);
+
+        String fin_Answer;
+
+        if(absolute_Answer.length() > max)
+        {
+            fin_Answer = absolute_Answer.substring(0,absolute_Answer.length() - (dec1 - dec2 + max) + '.');
+           
+            fin_Answer = fin_Answer + absolute_Answer.substring(absolute_Answer.length() - (dec1 - dec2+ max));
+            
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
+        }
+        else
+        {
+            fin_Answer = "0.";
+            
+            for(int i=0; i< max + dec1 - dec2 - absolute_Answer.length();i++)
+            {
+                fin_Answer = fin_Answer+'0';
+            }
+            
+            fin_Answer = fin_Answer.concat(absolute_Answer);
+            
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
+        }
+
+        if((string1.charAt(0)!='-' && string2.charAt(0)!='-' )||(string1.charAt(0)=='-' && string2.charAt(0)=='-')) return fin_Answer;
+        
+        else return '-' + fin_Answer;
+    }
+
+    public static AFloat Add(AFloat number1, AFloat number2)
+    {
+        return parse(Addition(number1.number,number2.number));
+    }
+
+    public static AFloat Subtract(AFloat number1, AFloat number2)
+    {
+        return parse(Subtraction(number1.number,number2.number));
+    }
+
+    public static AFloat Multiply(AFloat number1,AFloat number2)
+    {
+        return parse(Multiplication(number1.number, number2.number));
+    }
+
+    public static AFloat Divide(AFloat number1,AFloat number2)
+    {
+        return parse(Division(number1.number,number2.number));
+    }
+
 }
