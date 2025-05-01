@@ -72,7 +72,7 @@ public class AInteger {
                 string_sum = Integer.toString(sum_of_digit -10*carry).concat(string_sum);
             }
         }
-        // we add the leftover carry to the final sum
+        // This adds the leftover carry to the final sum
         if(carry!=0)
         {
             string_sum = Integer.toString(carry).concat(string_sum);
@@ -158,7 +158,7 @@ public class AInteger {
      * @param string1
      * @param string2
      * @return Boolean
-     * This function is used to konow if first string has more value than the second
+     * This function is used to know if first string has more value than the second
      */
     public static Boolean isgreater(String string1,String string2)
     {   
@@ -176,6 +176,7 @@ public class AInteger {
             if(string1.charAt(0)=='-') return false;
             else return true;
         }
+        // handling the sign before hand and removing leading zeroes to make the comparision easier
 
         int length1 = string1.length();
         
@@ -185,8 +186,12 @@ public class AInteger {
         
         if(length2 > length1) return false;
         
+        // comparing directly based on length if the lengths are not same
+        
         for(int i=0;i<length1;i++)
-        {
+        {   
+            // This iterates through out the string till it makes a conclusion regarding the larger number
+
             if(string1.charAt(i)-'0' > string2.charAt(i)-'0')
             {
                 return true;
@@ -226,12 +231,17 @@ public class AInteger {
             else return false;
         }
 
+       // handling the sign before hand and removing leading zeroes to make the comparision easier
+
         if(length1 < length2) return true;
         
         if(length2 < length1) return false;
         
+        // comparing directly based on length if the lengths are not same
+        
         for(int i=0;i<length1;i++)
-        {
+        {   
+            // This iterates through out the string till it makes a conclusion regarding the larger number
             if(string1.charAt(i)-'0' < string2.charAt(i)-'0')
             {
                 return true;
@@ -398,7 +408,7 @@ public class AInteger {
      * @param string1
      * @param string2
      * @return String
-     * Subtraction is basically the addition of the first integer plus the second additive inverse of the second integer
+     * Subtraction is basically the addition of the first integer plus the additive inverse of the second integer
      * so this function directly uses the Addition function as a helper by passing the second argument as the additive inverse of the argument provided
      */
     public static String Subtraction (String string1, String string2)
