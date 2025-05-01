@@ -340,7 +340,7 @@ public class AFloat {
            
             fin_Answer = fin_Answer + absolute_Answer.substring(absolute_Answer.length() - (max_dec + min_dec));
             
-            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));//30 decimal precision
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
         }
         else
         {   
@@ -354,7 +354,7 @@ public class AFloat {
             
             fin_Answer = fin_Answer + absolute_Answer;
             
-            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));//30 decimal precision
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
         }
         if((string1.charAt(0)!='-' && string2.charAt(0)!='-' )||(string1.charAt(0)=='-' && string2.charAt(0)=='-')) return fin_Answer;
         
@@ -365,7 +365,7 @@ public class AFloat {
     {
         if(!isdecimal(string1)) string1 = string1 + ".0";
         
-        if(!isdecimal(string2)) string2 = string2 + ".0";
+        if(!isdecimal(string2)) string2 = string2 + ".0"; // convert into decimals
 
         string1 = remove_both_leading_and_trailing_zeroes(string1);
         
@@ -375,12 +375,28 @@ public class AFloat {
         
         int dec2 = decimal_places(string2);
 
+        if(dec1 > dec2)
+        {
+            for(int i=1;i<=(dec1 - dec2);i++)
+            {
+                string2 = string2 + '0';
+            }
+        }
+        else
+        {
+            for(int i=1;i<=(dec2-dec1);i++)
+            {
+                string1 = string1 + '0';
+            }
+        } // making sure that both numbers have same number of decimal places
         
         String formatted_string1 = AInteger.absolute_string(string1.substring(0,decimal_index(string1)) + string1.substring(decimal_index(string1)+1));
            
         String formatted_string2 = AInteger.absolute_string(string2.substring(0,decimal_index(string2)) + string2.substring(decimal_index(string2)+1));
+        // removes the decimal point
 
-        int max = Math.max(30-dec2 + dec1 ,formatted_string2.length());
+        int max = Math.max(30,formatted_string2.length());
+        // This to ensure that the string doesnot miss out on precision
 
         for(int i=1;i<= (max);i++)
         {
@@ -392,50 +408,43 @@ public class AFloat {
         String fin_Answer;
 
         if(absolute_Answer.length() > max)
-        {
-            fin_Answer = absolute_Answer.substring(0,absolute_Answer.length() - (dec1 - dec2 + max)) + '.';
+        {   
+            // Placing the decimal point
+
+            fin_Answer = absolute_Answer.substring(0,absolute_Answer.length() - max) + '.';
            
-            fin_Answer = fin_Answer + absolute_Answer.substring(absolute_Answer.length() - (dec1 - dec2+ max));
+            fin_Answer = fin_Answer + absolute_Answer.substring(absolute_Answer.length() - max);
             
-            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer))); // 30 decimal precision
         }
         else
         {   
             //This block appends the required zeroes to ensure that the  decimal places are preserved
 
-            if(max + dec1 - dec2 - absolute_Answer.length() < 0)
+            fin_Answer = "0.";
+            
+            for(int i=0; i< max - absolute_Answer.length();i++)
             {
-                fin_Answer = absolute_Answer;
-
-                for(int i=0;i< absolute_Answer.length() + dec2 - dec1 - max;i++)
-                {
-                    fin_Answer = fin_Answer + "0";
-                }
-
-                fin_Answer = fin_Answer + ".0";
+                fin_Answer = fin_Answer+'0';
             }
-            else
-            {
-                fin_Answer = "0.";
             
-                for(int i=0; i< max + dec1 - dec2 - absolute_Answer.length();i++)
-                {
-                    fin_Answer = fin_Answer+'0';
-                }
+            fin_Answer = fin_Answer.concat(absolute_Answer);
             
-                fin_Answer = fin_Answer.concat(absolute_Answer);
+            fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
             
-                fin_Answer = Truncate(remove_both_leading_and_trailing_zeroes((fin_Answer)));
+            //This ensures that there is 30 decimal precision
             
-                //This ensures that there is 30 decimal precision
-            }
         }
 
         if((string1.charAt(0)!='-' && string2.charAt(0)!='-' )||(string1.charAt(0)=='-' && string2.charAt(0)=='-')) return fin_Answer;
         
         else return '-' + fin_Answer;
     }
-
+    
+    /*
+        Added the methods which passes the String to the helper functions from the object provided
+        Then it parses the String into object and return the object
+    */
     public static AFloat Add(AFloat number1, AFloat number2)
     {
         return parse(Addition(number1.number,number2.number));
