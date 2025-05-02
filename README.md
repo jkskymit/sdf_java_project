@@ -49,7 +49,20 @@ The data range of the standard data types in Java are:
         javac -cp arbitraryarithmetic/aarithmetic.jar -d bin ARBITRARYPRECISIONARITHMETIC/MyInfArith.java
     - While running the program, again include the JAR in the classpath:
         java -cp bin:arbitraryarithmetic/aarithmetic.jar MyInfArith FirstArg SecondArg ThirdArg FourthArg
-...
 
-
+  ### Project_runner :
+  - python/python3 Project_runner.py arg1 arg2 arg3 arg4
+  - This compiles and runs all the java files
+ 
+  ### Limitations :
+These are some instances for which my code is not ready yet.
+– Valid inputs are assumed
+– Decimal precision is limited to 30
+– This code doesnt roundoff it just truncates
+– String length cant exceed the value of INT_MAX
+### Areas of improvement
+- The precision of the AFloat can also be increased to any arbitrary value
+- More functions like modulo and better comparators can be added
+- Storing the string in the bases of 10000 instead of 10 can be done to optimise.
+- Some other Data structures can be used to reduce time complexity.
 
