@@ -25,16 +25,16 @@ arbitraryprecisionarithmetic
   - AFloat.class
 - build
   -arbitraryarithmetic
-   -AFloat.class
-   -AInteger.class
-  MyInfArith.class
--MyInfArith.class
--MyInfArith.java
--Project_runner.py
--dockerfile
--build.xml
--arbitraryprecision.pdf
-arbitraryprecision.tex
+   - AFloat.class
+   - AInteger.class
+- MyInfArith.class
+- MyInfArith.class
+- MyInfArith.java
+- Project_runner.py
+- dockerfile
+- build.xml
+- arbitraryprecision.pdf
+- arbitraryprecision.tex
    
 
 ### Limitations of the standard types in Java:
