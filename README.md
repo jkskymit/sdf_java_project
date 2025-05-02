@@ -35,4 +35,21 @@ The data range of the standard data types in Java are:
   - stores each float as a string from the object
   - storing as a string avoids overflow
   - supports Addition,Subtraction,Multiplication,Division
-### How to use
+### How to use :
+- MyInfArith
+  - Compile MyInfArith.java using "javac MyInfArith.java"
+  - Run using "java MyInfArith FirstArg SecondArg ThirdArg FourthArg".
+- Ant makefile
+  - ant clean removes all the compiled files
+  - ant run -Dargs="arg1 arg2 arg3 arg4"
+- Jar file
+    - Files in JAR file can be viewed using:
+    jar tf aarithmetic.jar
+    - Use the -cp option when compiling your Java file to include the JAR:
+        javac -cp arbitraryarithmetic/aarithmetic.jar -d bin ARBITRARYPRECISIONARITHMETIC/MyInfArith.java
+    - While running the program, again include the JAR in the classpath:
+        java -cp bin:arbitraryarithmetic/aarithmetic.jar MyInfArith FirstArg SecondArg ThirdArg FourthArg
+
+
+
+
