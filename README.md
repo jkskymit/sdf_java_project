@@ -54,7 +54,7 @@ The data range of the standard data types in Java are:
   - python/python3 Project_runner.py arg1 arg2 arg3 arg4
   - This compiles and runs all the java files
  
-  ### Limitations :
+### Limitations :
 These are some instances for which my code is not ready yet.
 – Valid inputs are assumed
 – Decimal precision is limited to 30
