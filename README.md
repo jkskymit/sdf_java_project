@@ -14,6 +14,29 @@ This Library is created as a Final Project for CS1023 course at IIT HYDERABAD.
 ## Introduction
 Precision in certain Data types of Java might not be sufficient in complex calculations where even a small error could become  significant so this *Arbitrary precision library* is created to  achieve greater precision .
 
+## Folder structure
+
+arbitraryprecisionarithmetic
+- arbitraryarithmetic
+  - aarithmetic.jar
+  - AInteger.java
+  - AFloat.java
+  - AInteger.class
+  - AFloat.class
+- build
+  -arbitraryarithmetic
+   -AFloat.class
+   -AInteger.class
+  MyInfArith.class
+-MyInfArith.class
+-MyInfArith.java
+-Project_runner.py
+-dockerfile
+-build.xml
+-arbitraryprecision.pdf
+arbitraryprecision.tex
+   
+
 ### Limitations of the standard types in Java:
 The data range of the standard data types in Java are:
 - `int` : **-2147483648** to **2147483647**
