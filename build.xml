@@ -1,0 +1,43 @@
+<project name="ArbitraryArithmetic" default="run" basedir=".">
+
+    <!-- Set up properties -->
+    <property name="build.dir" value="build"/>
+    <property name="jar.dir" value="arbitraryarithmetic"/>
+    <property name="jar.name" value="aarithmetic.jar"/>
+    <property name="main.class" value="MyInfArith"/>
+
+    <!-- Clean build and jar -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete file="${jar.dir}/${jar.name}"/>
+    </target>
+
+    <!-- Compile all .java files from root and arbitraryarithmetic -->
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}" includeantruntime="false">
+            <src path="."/>
+            <src path="arbitraryarithmetic"/>
+        </javac>
+    </target>
+
+    <!-- Create jar from compiled classes into arbitraryarithmetic/ -->
+    <target name="jar" depends="compile">
+        <jar destfile="${jar.dir}/${jar.name}" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Implementation-Title" value="Arbitrary Arithmetic Library"/>
+                <attribute name="Implementation-Version" value="1.0"/>
+            </manifest>
+            <exclude name="MyInfArith.class"/>
+        </jar>
+    </target>
+
+    <!-- Run the program -->
+    <target name="run" depends="jar">
+        <java classname="${main.class}" fork="true" classpath="${jar.dir}/${jar.name}:${build.dir}">
+            <arg line="${args}"/>
+        </java>
+    </target>
+
+</project>

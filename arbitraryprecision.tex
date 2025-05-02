@@ -1,0 +1,509 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\title{Arbitrary Precision Library}
+\author{Kuruva Jeshwanth Krishna}
+\date{May 2 2025}
+\geometry{left=1in,right=1in,top=1in,bottom=1in}
+\begin{document}
+
+\maketitle
+
+\section{Abstract}
+This report outlines the implementation and usage of aarithmetic.jar library, which supports arbitrary precision for integer operations and 30 decimal precision for float operations
+This report describes Design,implementations, provide class diagram in UML format, and include to help users understand the entire structure of library 
+
+\section{Introduction}
+This library is developed in order to achieve very high precision which is not possible to obtain from the data types like integer, float, double ..etc  data types of  Java. This level of precision is  achieved through storing the numbers as strings and performing the basic arithmetic on the parts of the string to achieve great precision at the cost of Time complexity.
+
+\section{Design}
+
+This section describes the internal design and implementation structure of the library class. My approach focuses on the ability to handle arbitrarily large integers through manual arithmetic.
+
+\subsection{Structure of Implementation}
+
+I implemented a two public class \texttt{AInteger and AFloat} that includes:
+
+\begin{itemize}
+    \item A Public String to store the number in base 10.
+
+    \item A default constructor to initialize an integer  to "0" and float to "0.0"
+    
+    \item A parametric constructor to initialize with the given string
+
+    \item A parse method to create an object from a string
+\subsection{Methods}
+    \item Public static methods at a very high level:
+    \begin{itemize}
+        \item \texttt{Addition()}
+        \item \texttt{Subtraction()}
+        \item \texttt{Multiplication()}
+        \item \texttt{Division()}
+    \end{itemize}
+    \item Public static methods at slightly lower level
+    \begin{itemize}
+    \item These functions are the helpers of the high level functions operating on strings
+        \item \texttt{Add()}
+        \item \texttt{Subtract()}
+        \item \texttt{Multiply()}
+        \item \texttt{Divide()}
+    \end{itemize}
+    \item More Public helper methods which are used at further lower level will be displayed later in the report
+
+\end{itemize}
+
+\subsection{Design Decisions}
+
+There were some key decisions I made to ensure readability reusability and modularity of the code:
+
+\begin{itemize}
+    \item \textbf{Helper functions:} This code has a lot of helper functions, This code deals more with string attribute of an object more than an object itself so I added the helper functions before hand for all the major calculations with string arguments 
+
+    \item \textbf{Modularity:} Each arithmetic operation is broken into smaller methods for clarity and easier debugging. Helper methods handle edge cases like normalization and magnitude comparison.
+
+    \item \textbf{Single-Class Design:} All logic is encapsulated in a single class to keep the interface simple and focused, while still being maintainable.
+\end{itemize}
+
+\section{Implementations}
+The key parts of the implementation of the classes will be presented in the following section
+\subsection{AInteger}
+A breif Implementation of AInteger's methods are provided below \\
+\begin{itemize}
+    
+    \item \textbf{Public AInteger():} Default constructor used to create an instance and initialize it to "0"\\
+    
+    \item \textbf{Public AInteger(String):} Parametric constructor used to create an instance and initialize it to the string provided in the argument\\
+    
+    \item \textbf{Public AInteger(AInteger):} Copy constructor this initializes the value of the object with the object provided in the argument\\
+    
+    \item  \textbf{Public static AInteger parse :} Function to create an instance of AInteger from a string\\
+    
+    \item \textbf{Public static String add\_strings :}This function adds two non-negative integers represented as strings, assuming the first string string1 is not shorter than the second \texttt{string2}. It simulates manual digit-by-digit addition from right to left, maintaining a carry throughout the process.
+
+    At each step:
+    \begin{itemize}
+        \item Digits from both strings are added along with any carry.
+        \item If \texttt{string2} is exhausted, only \texttt{string1} digits and carry are used.
+        \item The resulting digit is prepended to the result string.
+    \end{itemize}
+    After the loop, if a carry remains, it is added to the front of the result. The final string represents the integer sum.\\
+    
+    \item \textbf{Public static String subtract\_strings :} This function subtracts two non-negative integers represented as strings, assuming that \texttt{string1} is not shorter and not smaller than \texttt{string2}. It simulates manual digit-by-digit subtraction from right to left, maintaining a borrow when necessary.
+
+    At each step:
+    \begin{itemize}
+        \item Digits from both strings are subtracted, considering any existing borrow.
+        \item If the digit in \texttt{string1} is smaller than the corresponding digit in \texttt{string2} plus the borrow, it borrows from the next higher digit.
+        \item If \texttt{string2} is exhausted, only the digits of \texttt{string1} and borrow are processed.
+    \item The resulting digit is prepended to the result string.
+    \end{itemize}\\
+
+    \item \textbf{Public static Boolean isgreater :} This function compares two integer strings \texttt{string1} and \texttt{string2}, which may include negative signs, and returns \texttt{true} if \texttt{string1} is numerically greater than \texttt{string2}, otherwise \texttt{false}. It first removes any leading zeroes and handles sign comparison.
+
+The logic proceeds as follows:
+\begin{itemize}
+    \item If either string starts with a minus sign, their signs are evaluated to determine the result directly.
+    \item If both numbers are negative, the result is determined by checking which absolute value is smaller.
+    \item If signs are the same and both numbers are non-negative, the function compares lengths of the strings to decide.
+    \item If lengths are equal, it compares digits from left to right to determine which string represents the greater value.
+\end{itemize}\\
+
+\item \textbf{Public static Boolean islesser :} This function compares two integer strings \texttt{string1} and \texttt{string2}, which may include negative signs, and returns \texttt{true} if \texttt{string1} is numerically less than \texttt{string2}, otherwise \texttt{false}. Leading zeroes are removed before performing the comparison.
+
+The logic proceeds as follows:
+\begin{itemize}
+    \item If either string has a negative sign, their signs are handled to directly infer the result.
+    \item If both are negative, the function uses the reversed logic by calling \texttt{isgreater} on their absolute values.
+    \item If both numbers are non-negative, the lengths of the strings are compared.
+    \item If lengths are equal, it compares digits from left to right to determine the lesser value.
+\end{itemize}\\
+
+\item \textbf{Public static Boolean isgreater\_or\_equals :} This function compares two integer strings \texttt{string1} and \texttt{string2} and returns \texttt{true} if \texttt{string1} is greater than or equal to \texttt{string2}, otherwise \texttt{false}.
+
+The logic is as follows:
+\begin{itemize}
+    \item It returns \texttt{true} if \texttt{string1} is numerically greater than \texttt{string2}, determined using the \texttt{isgreater} function.
+    \item If the strings are numerically equal after removing leading zeroes, it also returns \texttt{true}.
+    \item Otherwise, it returns \texttt{false}.
+\end{itemize}\\
+
+\item \textbf{Public static Boolean islesser\_or\_equals :} This function compares two integer strings \texttt{string1} and \texttt{string2} and returns \texttt{true} if \texttt{string1} is less than or equal to \texttt{string2}, otherwise \texttt{false}.
+
+The logic is as follows:
+\begin{itemize}
+    \item It returns \texttt{true} if \texttt{string1} is numerically less than \texttt{string2}, determined using the \texttt{islesser} function.
+    \item If the strings are numerically equal after removing leading zeroes, it also returns \texttt{true}.
+    \item Otherwise, it returns \texttt{false}.
+\end{itemize}\\
+
+\item \textbf{Public static String remove\_leading\_zeroes :} This function removes any leading zeroes from a given integer string \texttt{string}, while preserving the sign if the number is negative.
+
+The logic is as follows:
+\begin{itemize}
+    \item It iterates through the string until it finds a non-zero digit (excluding any negative sign).
+    \item If the string represents a negative number, the minus sign is retained and the substring starting from the first non-zero digit is returned.
+    \item If all characters are zeroes, the function returns \texttt{"0"}.
+\end{itemize}\\
+
+\item \textbf{Public static String absolute\_string :} This function returns the absolute value of an integer represented as a string by removing the negative sign if present.
+
+The logic is as follows:
+\begin{itemize}
+    \item If the first character of the string is a minus sign, it returns the substring excluding the sign.
+    \item Otherwise, it returns the original string unchanged.
+\end{itemize}
+
+\item \textbf{Public static String Addition :} This function adds two integer strings \texttt{string1} and \texttt{string2}, considering their signs and handling various edge cases. It uses the helper functions \texttt{add\_strings} and \texttt{subtract\_strings} to perform the addition after ensuring that the assumptions of these functions are met.\\
+
+The logic proceeds as follows:
+\begin{itemize}
+    \item First, leading zeroes are removed from both strings using the \texttt{remove\_leading\_zeroes} function.
+    \item If both strings are negative:
+    \begin{itemize}
+        \item The absolute values of both strings are calculated.
+        \item The strings are compared, and the larger absolute value is passed to the \texttt{add\_strings} function to perform the addition.
+        \item The result is prefixed with a negative sign.
+    \end{itemize}
+    \item If exactly one string is negative:
+    \begin{itemize}
+        \item The absolute values of both strings are calculated.
+        \item The larger absolute value is subtracted from the smaller one using the \texttt{subtract\_strings} function, and the result is prefixed with the sign of the larger number.
+    \end{itemize}
+    \item If both strings are positive:
+    \begin{itemize}
+        \item The strings are compared, and the addition is performed using \texttt{add\_strings} based on the comparison.
+    \end{itemize}
+\end{itemize}\\
+
+\item \textbf{Public static String Subtraction :} This function subtracts two integer strings \texttt{string1} and \texttt{string2} by using the \texttt{Addition} function. It calculates the subtraction by adding the first integer to the additive inverse of the second integer.
+
+The logic is as follows:
+\begin{itemize}
+    \item If \texttt{string2} is positive, it is converted to its negative form by prepending a minus sign.
+    \item The \texttt{Addition} function is then called with \texttt{string1} and the modified \texttt{string2}.
+    \item The result from the \texttt{Addition} function is returned as the subtraction result.
+\end{itemize}\\
+
+\item \textbf{Public static String Multiplication :} This function multiplies two integer strings \texttt{string1} and \texttt{string2} by using repeated addition. The function first computes the product of the absolute values of the two strings and then prepends the appropriate sign to the result.
+
+The logic is as follows:
+\begin{itemize}
+    \item The absolute values of both input strings are obtained by removing leading zeroes and signs using the \texttt{absolute\_string} and \texttt{remove\_leading\_zeroes} functions.
+    \item A check is performed to immediately return \texttt{"0"} if either of the input strings is "0".
+    \item A loop iterates over the digits of the second string, multiplying the first string by each digit of the second string (digit-by-digit multiplication).
+    \item For each multiplication, the result is added to a cumulative product using the \texttt{Addition} function, with appropriate zeroes padded based on the place of the digit in the second string.
+    \item After the multiplication is complete, the function prepends the appropriate sign based on the signs of the input strings.
+\end{itemize}\\
+
+\item \textbf{Public static String Division :} This function performs integer division of two integer strings \texttt{string1} and \texttt{string2} by using repeated subtraction. It computes the quotient by subtracting the divisor from the dividend until the remainder is smaller than the divisor.
+
+The logic is as follows:
+\begin{itemize}
+    \item The absolute values of both input strings are obtained by removing leading zeroes and signs using the \texttt{absolute\_string} and \texttt{remove\_leading\_zeroes} functions.
+    \item An exception is thrown if the divisor is zero to avoid division by zero.
+    \item If the dividend is smaller than the divisor, the quotient is immediately set to "0".
+    \item A loop iterates through the digits of the dividend, creating a temporary dividend and performing repeated subtraction of the divisor from it.
+    \item The quotient is built by counting how many times the divisor can be subtracted from the temporary dividend.
+    \item After the division is complete, the function removes any leading zeroes from the quotient and prepends the appropriate sign based on the signs of the input strings.
+\end{itemize}\\
+
+\item\textbf{Public static AInteger Add :} This function passes the string attribute to its respective helper parses it into an object and returns the answer
+
+\item\textbf{Public static AInteger Subtract :} This function passes the string attribute to its respective helper parses it into an object and returns the answer
+
+\item\textbf{Public static AInteger Multiply :} This function passes the string attribute to its respective helper parses it into an object and returns the answer
+
+\item\textbf{Public static AInteger Divide:} This function passes the string attribute to its respective helper parses it into an object and returns the answer
+
+\end{itemize}
+
+\subsection{AFloat}
+
+\begin{itemize}
+    \item A breif Implementation of AFloat's methods are provided below \\
+\begin{itemize}
+    
+    \item \textbf{Public AFloat():} Default constructor used to create an instance and initialize it to "0.0"\\
+    
+    \item \textbf{Public AFloat(String):} Parametric constructor used to create an instance and initialize it to the string provided in the argument\\
+    
+    \item \textbf{Public AFloat(AFloat):} Copy constructor this initializes the value of the object with the object provided in the argument\\
+    
+    \item  \textbf{Public static AFloat parse :} Function to create an instance of AInteger from a string\\
+\end{itemize}
+
+\item \textbf{Public static Boolean isdecimal :}
+This function checks whether the input string \texttt{string} represents a decimal number by verifying the presence of a decimal point.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function iterates over each character in the input string.
+    \item If any character is a \texttt{'.'}, the function returns \texttt{true}, indicating that the number is a decimal.
+    \item If no decimal point is found after examining the entire string, the function returns \texttt{false}.\\
+\end{itemize}
+
+\item \textbf{Public static String remove\_leading\_zeroes :} 
+This function removes the leading zeroes from the given string \texttt{string} while preserving its sign.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function first checks if the input string is a decimal by calling the \texttt{isdecimal} method.
+    \item If the string is not a decimal (i.e., an integer), it delegates the removal of leading zeroes to the \texttt{AInteger.remove\_leading\_zeroes} method.
+    \item For decimal strings, the function iterates through the characters of the string to find the first non-zero character or the decimal point.
+    \item If the string contains a decimal point and all characters before it are zeroes, it removes these zeroes and ensures the sign of the string is preserved.
+    \item The function returns the string with leading zeroes removed, and the sign preserved (if present).\\
+\end{itemize}
+
+\item \textbf{Public static String remove\_trailing\_zeroes :} 
+This function removes all the trailing zeroes after the decimal point from the given string \texttt{string} and returns the modified string.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function first checks if the string is a decimal by calling the \texttt{isdecimal} method.
+    \item If the string is a decimal, the function starts from the last character and iterates backward to find the last non-zero character.
+    \item If the last non-zero character is a decimal point, the function ensures that the decimal point is preserved and removes the trailing zeroes.
+    \item If there are no trailing zeroes, or the string is an integer, the function returns the string as is.
+    \item For integers, the string is returned without any modifications since trailing zeroes do not exist in integers.\\
+\end{itemize}
+
+\item \textbf{Public static String remove\_both\_leading\_and\_trailing\_zeroes :} 
+This function removes both the leading and trailing zeroes from the given string \texttt{string}.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function first removes the leading zeroes by calling the \texttt{remove\_leading\_zeroes} method.
+    \item After removing the leading zeroes, it then removes the trailing zeroes by calling the \texttt{remove\_trailing\_zeroes} method.
+    \item This ensures that the string is left with only significant digits, with no unnecessary zeroes at either end.\\
+\end{itemize}
+
+\item \textbf{Public static int decimal\_places :} 
+This function counts the number of elements (digits) present after the decimal point in the given string \texttt{string}.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function first checks if the string contains a decimal point by calling the \texttt{isdecimal} function.
+    \item If the string contains a decimal point, the function iterates backwards through the string until it finds the decimal point.
+    \item It then calculates the number of digits that appear after the decimal point by subtracting the position of the decimal point from the total length of the string.
+    \item If the string does not contain a decimal point (i.e., it is an integer), the function returns 0.\\
+\end{itemize}
+
+\item \textbf{Public static int decimal\_index :} 
+This function returns the index of the decimal point in the given string \texttt{string}.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function calculates the number of decimal places in the string by calling the \texttt{decimal\_places} function.
+    \item It then computes the index of the decimal point by subtracting the number of decimal places from the total length of the string and adjusting for the position of the decimal point.\\
+\end{itemize}
+
+\item \textbf{Public static String Truncate :} 
+This function ensures that the number of decimal places in the given string \texttt{string} is less than or equal to 30. If the string has more than 30 decimal places, it truncates the string to 30 decimal places.
+
+The logic is as follows:
+\begin{itemize}
+    \item The function first checks if the number of decimal places in the string is less than or equal to 30 using the \texttt{decimal\_places} function.
+    \item If the number of decimal places is already less than or equal to 30, it returns the original string.
+    \item If the number of decimal places exceeds 30, it truncates the string to the first 30 decimal places using the \texttt{substring} function.\\
+\end{itemize}
+
+\item \textbf{Public static String Addition :} 
+This function returns the sum of two given strings, \texttt{string1} and \texttt{string2}, while handling both integer and decimal cases. It uses the \texttt{Addition} function from the \texttt{AInteger} class to compute the sum without the decimal point, then places the decimal point in the resulting sum.
+
+The logic is as follows:
+\begin{itemize}
+    \item If both strings are integers (i.e., they do not contain a decimal point), the function delegates the addition to the \texttt{AInteger.Addition} method.
+    \item If either string is not a decimal, the function appends a \texttt{".0"} to convert it into a decimal.
+    \item Leading and trailing zeroes are removed from both strings using the \texttt{remove\_both\_leading\_and\_trailing\_zeroes} function.
+    \item The maximum number of decimal places between the two strings is computed to align the decimal points in the final result.
+    \item Trailing zeroes are padded to ensure both strings have the same number of decimal places.
+    \item The decimal points are removed from both strings to treat them as integers, and the sum is computed using the \texttt{AInteger.Addition} function.
+    \item After the sum is computed, the decimal point is placed in the appropriate position, and the result is truncated to a maximum of 30 decimal places using the \texttt{Truncate} function.
+    \item If the result is negative, the sign is preserved.\\
+\end{itemize}
+
+\item \textbf{Public static String Subtraction :} 
+This function returns the result of subtracting \texttt{string2} from \texttt{string1} by using the fact that subtraction is the addition of the first number and the additive inverse of the second number.
+
+The logic is as follows:
+\begin{itemize}
+    \item If \texttt{string2} is negative (i.e., it starts with a \texttt{'-'}), the negative sign is removed.
+    \item If \texttt{string2} is positive, a negative sign is prepended to it, effectively making it the additive inverse.
+    \item The \texttt{Addition} function is then called with \texttt{string1} and the modified \texttt{string2} (which has the opposite sign) to perform the addition.
+    \item The result from the \texttt{Addition} function is returned as the result of the subtraction. \\
+\end{itemize}
+
+\item \textbf{Public static String Multiplication :} 
+This function returns the result of multiplying \texttt{string1} and \texttt{string2} by first converting them into integers and performing multiplication, then appropriately placing the decimal point in the result.
+
+The logic is as follows:
+\begin{itemize}
+    \item If neither of the input strings is decimal, the \texttt{AInteger.Multiplication} function is used to perform integer multiplication.
+    \item If either of the strings is not decimal, a \texttt{.0} is appended to make it a decimal.
+    \item Both strings are cleaned by removing leading and trailing zeroes using the \texttt{remove\_both\_leading\_and\_trailing\_zeroes} function.
+    \item The number of decimal places in both strings is calculated, and padding is added to ensure they have the same number of decimal places.
+    \item The decimal point is removed from both strings to perform integer multiplication.
+    \item The result of the multiplication is then calculated by calling the \texttt{AInteger.Multiplication} function.
+    \item The result is formatted back by inserting the decimal point at the appropriate position, based on the sum of the decimal places of both strings.
+    \item The final result is truncated to a precision of 30 decimal places and leading/trailing zeroes are removed.
+    \item The sign of the result is adjusted based on the signs of the input strings. If both strings are positive or both negative, the result is positive; otherwise, it is negative.
+\end{itemize}
+
+\item \textbf{Public static String Division :} 
+This function returns the quotient of \texttt{string1} and \texttt{string2} by performing the division operation on the two decimal strings and then adjusting for decimal points and signs.//
+
+The logic is as follows:
+\begin{itemize}
+    \item If either of the input strings is not a decimal, a \texttt{.0} is appended to convert it into a decimal.
+    \item The \texttt{remove\_both\_leading\_and\_trailing\_zeroes} function is used to remove any unwanted zeroes from both strings.
+    \item The number of decimal places in both input strings is calculated using the \texttt{decimal\_places} function.
+    \item The strings are padded with zeroes to ensure they have the same number of decimal places.
+    \item The decimal point is removed from both strings to perform the division, and absolute values are used to avoid issues with signs.
+    \item The \texttt{AInteger.Division} function is called to perform the integer division.
+    \item The result is then formatted by placing the decimal point at the appropriate position based on the decimal places.
+    \item If the result has fewer decimal places than required, additional zeroes are appended to the result.
+    \item The final result is truncated to 30 decimal places using the \texttt{Truncate} function.
+    \item The sign of the result is adjusted based on the signs of the input strings. If both strings are either positive or both negative, the result is positive; otherwise, it is negative.
+\end{itemize}
+\end{itemize}
+\section{UML DIAGRAMS}
+
+
+\begin{center}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.95\linewidth}|}
+\hline
+\textbf{\large AInteger} \\
+\hline
+\textbf{Attributes} \\
+\hline
+- integer : String \\
+\hline
+\textbf{Constructors} \\
+\hline
++ AInteger() \\
++ AInteger(string : String) \\
++ AInteger(other : AInteger) \\
+\hline
+\textbf{Static Methods} \\
+\hline
++ parse(string : String) : AInteger \\
++ Add(integer1 : AInteger, integer2 : AInteger) : AInteger \\
++ Subtract(integer1 : AInteger, integer2 : AInteger) : AInteger \\
++ Multiply(integer1 : AInteger, integer2 : AInteger) : AInteger \\
++ Divide(integer1 : AInteger, integer2 : AInteger) : AInteger \\
++ Addition(string1 : String, string2 : String) : String \\
++ Subtraction(string1 : String, string2 : String) : String \\
++ Multiplication(string1 : String, string2 : String) : String \\
++ Division(string1 : String, string2 : String) : String \\
++ add\_strings(string1 : String, string2 : String) : String \\
++ subtract\_strings(string1 : String, string2 : String) : String \\
++ isgreater(s1 : String, s2 : String) : Boolean \\
++ islesser(s1 : String, s2 : String) : Boolean \\
++ isgreater\_or\_equals(s1 : String, s2 : String) : Boolean \\
++ islesser\_or\_equals(s1 : String, s2 : String) : Boolean \\
++ remove\_leading\_zeroes(string : String) : String \\
++ absolute\_string(string : String) : String \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.95\linewidth}|}
+\hline
+\textbf{\large AFloat} \\
+\hline
+\textbf{Attributes} \\
+\hline
+- number : String \\
+\hline
+\textbf{Constructors} \\
+\hline
++ AFloat() \\
++ AFloat(string : String) \\
++ AFloat(other : AFloat) \\
+\hline
+\textbf{Static Methods} \\
+\hline
++ parse(string : String) : AFloat \\
++ remove\_leading\_zeroes(string : String) : String \\
++ isdecimal(string : String) : Boolean \\
++ remove\_trailing\_zeroes(string : String) : String \\
++ remove\_both\_leading\_and\_trailing\_zeroes(string : String) : String \\
++ decimal\_places(string : String) : int \\
++ decimal\_index(string : String) : int \\
++ Truncate(string : String) : String \\
++ Addition(string1 : String, string2 : String) : String \\
++ Subtraction(string1 : String, string2 : String) : String \\
++ Multiplication(string1 : String, string2 : String) : String \\
++ Division(string1 : String, string2 : String) : String \\
++ Add(number1 : AFloat, number2 : AFloat) : AFloat \\
++ Subtract(number1 : AFloat, number2 : AFloat) : AFloat \\
++ Multiply(number1 : AFloat, number2 : AFloat) : AFloat \\
++ Divide(number1 : AFloat, number2 : AFloat) : AFloat \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Verification}
+This section provides some test cases which I ran in different ways
+\begin{itemize}
+    \item {MyInfArith :} 
+\begin{itemize}
+    \item java MyInfArith int add 789 324 = 1113
+
+    \item java MyInfArith int sub 789 3240 = -2451
+
+    \item java MyInfArith int mul 325 715 = 232375
+    
+    \item java MyInfArith int div 346 21 = 17 \\
+    
+\end{itemize}
+    \item{Project\_runner :}
+
+\begin{itemize}
+\item\texttt{This is the name of the python script I used}. 
+    \item python3 Project\_runner.py float add 4.77 1.23 = 6
+    \item python3 Project\_runner.py float sub -2.8 1.25 = -4.05
+    \item python3 Project\_runner.py float mul -280000.234 1.256 = -351680.293904
+    \item python3 Project\_runner.py float div -28 1.256 = -22.29299363057324840764331210191 \\
+\end{itemize}
+    \item {ant :}
+\begin{itemize}
+    \item ant run -Dargs="int add 23650078224912949497310933240250 42939783262467113798386384401498" = 66589861487380063295697317641748
+    \item ant run -Dargs="int sub 3116511674006599806495512758577 57745242300346381144446453884008" = -54628730626339781337950941125431
+    \item ant run -Dargs="float mul  6400251.9377695 2326541.6827934" = 14890452913599.9717457253213
+    \item ant run -Dargs="float div 3227 555" = 5.814414414414414414414414414414
+\end{itemize}
+
+\end{itemize}
+These are some test cases which I verified.
+\section{Key learnings :}
+This is a list of things I learnt while making this project
+\begin{itemize}
+    \item OOP concepts 
+    \item various functions in String class of java
+    \item various git commands
+    \item jar file creation
+    \item python for execution scripts
+    \item lot of latex aswell
+    
+\end{itemize}
+
+\section{Limitations :}
+These are some instances for which my code is not ready yet.
+\begin{itemize}
+    \item Valid inputs are assumed 
+    \item Decimal precision is limited to 30
+    \item This code doesnt roundoff it just truncates
+    \item String length cant exceed the value of INT\_MAX
+\end{itemize}
+
+\section{Areas of Improvement :}
+\begin{itemize}
+    \item The precision of the AFloat can also be increased to any arbitrary value
+    \item More functions like modulo and better comparators can be added
+    \item Storing the string in the bases of 10000 instead of 10 can be done to optimise.
+    \item Some other Data structures can be used to reduce time complexity.
+\end{itemize}
+
+\end{document}
